@@ -6,7 +6,7 @@ export default class NewsItem extends Component {
       this.props;
     return (
       <div>
-        <div className="card">
+        <div className="card my-3">
           <span
             className="position-absolute top-0 translate-middle badge rounded-pill bg-success"
             style={{

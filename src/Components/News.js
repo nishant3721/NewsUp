@@ -29,14 +29,18 @@ export default class News extends Component {
   }
 
   async updateNews() {
-    const url = `https://newsapi.org/v2/top-headlines?&category=${this.props.category}&country=${this.props.country}&apiKey=3538028a157942458c65e9d748a03825&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+    this.props.setProgress(10);
+    const url = `https://newsapi.org/v2/top-headlines?&category=${this.props.category}&country=${this.props.country}&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+    this.props.setProgress(30);
     let data = await fetch(url);
     let parseData = await data.json();
+    this.props.setProgress(70);
     this.setState({
       articles: this.state.articles.concat(parseData.articles),
       totalArticles: parseData.totalResults,
       loading: false,
     });
+    this.props.setProgress(100);
   }
 
   async componentDidMount() {
@@ -58,7 +62,7 @@ export default class News extends Component {
   render() {
     return (
       <>
-        <h1 className="text-center">
+        <h1 className="my-3 text-center">
           Headlines - Top stories from {this.capitalize(this.props.category)}
         </h1>
 
@@ -71,11 +75,6 @@ export default class News extends Component {
             this.state.articles.length !== this.state.totalArticles.length
           }
           loader={<ProgressBar />}
-          endMessage={
-            <p style={{ textAlign: "center" }}>
-              <b>Yay! You have seen it all</b>
-            </p>
-          }
         >
           <div className="container">
             <div className="my-5 row">
