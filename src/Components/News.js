@@ -1,102 +1,115 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import NewsItem from "./NewsItem";
 import ProgressBar from "./ProgressBar";
 import PropTypes from "prop-types";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-export default class News extends Component {
-  static defaultProps = {
-    country: "in",
-    pageSize: 3,
-    category: "general",
-  };
+const News = (props) => {
+  const [articles, setArticles] = useState([]);
+  const [totalArticles, setTotalArticles] = useState(0);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
 
-  static propTypes = {
-    category: PropTypes.string,
-    country: PropTypes.string,
-    pageSize: PropTypes.number,
-  };
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      articles: [],
-      loading: false,
-      page: 1,
-      totalArticles: 0,
-    };
-    document.title = `${this.capitalize(this.props.category)} - NewsUp`;
-  }
-
-  async updateNews() {
-    this.props.setProgress(10);
-    const url = `https://newsapi.org/v2/top-headlines?&category=${this.props.category}&country=${this.props.country}&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
-    this.props.setProgress(30);
-    let data = await fetch(url);
-    let parseData = await data.json();
-    this.props.setProgress(70);
-    this.setState({
-      articles: this.state.articles.concat(parseData.articles),
-      totalArticles: parseData.totalResults,
-      loading: false,
-    });
-    this.props.setProgress(100);
-  }
-
-  async componentDidMount() {
-    this.updateNews();
-  }
-
-  fetchData = async () => {
-    this.setState({
-      page: this.state.page + 1,
-    });
-    this.updateNews();
-  };
-
-  capitalize(word) {
+  const capitalize = (word) => {
     const lower = word.toLowerCase();
     return lower.charAt(0).toUpperCase() + lower.slice(1);
-  }
+  };
 
-  render() {
-    return (
-      <>
-        <h1 className="my-3 text-center">
-          Headlines - Top stories from {this.capitalize(this.props.category)}
-        </h1>
+  const updateNews = async () => {
+    props.setProgress(10);
+    const url = `https://newsapi.org/v2/top-headlines?&category=${props.category}&country=${props.country}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pageSize}`;
+    props.setProgress(30);
+    let data = await fetch(url);
+    let parseData = await data.json();
+    props.setProgress(70);
+    setArticles(parseData.articles);
+    setTotalArticles(parseData.totalResults);
+    setLoading(false);
+    props.setProgress(100);
+  };
 
-        {this.state.loading && <ProgressBar />}
+  useEffect(() => {
+    document.title = `${capitalize(props.category)} - NewsUp`;
+    updateNews();
+    // eslint-disable-next-line
+  }, []);
 
-        <InfiniteScroll
-          dataLength={this.state.articles.length} //This is important field to render the next data
-          next={this.fetchData}
-          hasMore={
-            this.state.articles.length !== this.state.totalArticles.length
-          }
-          loader={<ProgressBar />}
-        >
-          <div className="container">
-            <div className="my-5 row">
-              {this.state.articles.map((item) => {
-                return (
-                  <div key={item.url} className="col-md-4">
-                    <NewsItem
-                      title={item.title}
-                      imageUrl={item.urlToImage}
-                      description={item.description}
-                      newsUrl={item.url}
-                      author={item.author}
-                      date={item.publishedAt}
-                      source={item.source.name}
-                    />
-                  </div>
-                );
-              })}
-            </div>
+  const fetchData = async () => {
+    document.title = `${capitalize(props.category)} - NewsUp`;
+    props.setProgress(10);
+    const url = `https://newsapi.org/v2/top-headlines?&category=${
+      props.category
+    }&country=${props.country}&apiKey=${props.apiKey}&page=${
+      page + 1
+    }&pageSize=${props.pageSize}`;
+    setPage(page + 1);
+    props.setProgress(30);
+    let data = await fetch(url);
+    let parseData = await data.json();
+    props.setProgress(70);
+    setArticles(articles.concat(parseData.articles));
+    setLoading(false);
+    props.setProgress(100);
+  };
+
+  return (
+    <>
+      <h1
+        style={{
+          marginTop: `95px`,
+        }}
+        className="text-center"
+      >
+        Headlines - Top stories from {capitalize(props.category)}
+      </h1>
+
+      {loading && <ProgressBar />}
+
+      <InfiniteScroll
+        dataLength={articles.length} //This is important field to render the next data
+        next={fetchData}
+        hasMore={articles.length !== totalArticles}
+        loader={<ProgressBar />}
+        // endMessage={
+        //   <p style={{ textAlign: "center" }}>
+        //     <b>Yay! You have seen it all</b>
+        //   </p>
+        // }
+      >
+        <div className="container">
+          <div className="my-5 row">
+            {articles.map((item) => {
+              return (
+                <div key={item.url} className="col-md-4">
+                  <NewsItem
+                    title={item.title}
+                    imageUrl={item.urlToImage}
+                    description={item.description}
+                    newsUrl={item.url}
+                    author={item.author}
+                    date={item.publishedAt}
+                    source={item.source.name}
+                  />
+                </div>
+              );
+            })}
           </div>
-        </InfiniteScroll>
-      </>
-    );
-  }
-}
+        </div>
+      </InfiniteScroll>
+    </>
+  );
+};
+
+News.defaultProps = {
+  country: "in",
+  pageSize: 3,
+  category: "general",
+};
+
+News.propTypes = {
+  category: PropTypes.string,
+  country: PropTypes.string,
+  pageSize: PropTypes.number,
+};
+
+export default News;
