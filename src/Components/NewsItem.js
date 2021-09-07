@@ -1,10 +1,18 @@
 import React from "react";
 
 const NewsItem = (props) => {
-  let { title, imageUrl, description, newsUrl, author, date, source } = props;
+  let { title, imageUrl, description, newsUrl, author, date, source, mode } =
+    props;
   return (
     <div>
-      <div className="card my-3">
+      <div
+        style={{
+          backgroundColor: mode === `light` ? `white` : `#000316`,
+          color: mode === `light` ? `black` : `white`,
+          border: mode === `light` ? `2px solid black` : `2px solid pink`,
+        }}
+        className="card my-3"
+      >
         <span
           className="position-absolute top-0 translate-middle badge rounded-pill bg-success"
           style={{

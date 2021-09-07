@@ -56,7 +56,8 @@ const News = (props) => {
     <>
       <h1
         style={{
-          marginTop: `95px`,
+          marginTop: `90px`,
+          color: props.mode === `light` ? `black` : `white`,
         }}
         className="text-center"
       >
@@ -69,7 +70,7 @@ const News = (props) => {
         dataLength={articles.length} //This is important field to render the next data
         next={fetchData}
         hasMore={articles.length !== totalArticles}
-        loader={<ProgressBar />}
+        loader={<h4>Loading...</h4>}
         // endMessage={
         //   <p style={{ textAlign: "center" }}>
         //     <b>Yay! You have seen it all</b>
@@ -82,6 +83,7 @@ const News = (props) => {
               return (
                 <div key={item.url} className="col-md-4">
                   <NewsItem
+                    mode={props.mode}
                     title={item.title}
                     imageUrl={item.urlToImage}
                     description={item.description}

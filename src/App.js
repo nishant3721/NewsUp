@@ -6,7 +6,18 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import LoadingBar from "react-top-loading-bar";
 
 const App = () => {
+  const [mode, setMode] = useState(`light`);
   const [progress, setProgress] = useState(10);
+
+  const modeSwitch = () => {
+    if (mode === `light`) {
+      setMode(`dark`);
+      document.body.style.backgroundColor = "#000316";
+    } else {
+      setMode(`light`);
+      document.body.style.backgroundColor = "white";
+    }
+  };
 
   const apiKey = process.env.REACT_APP_NEWS_API;
 
@@ -19,10 +30,11 @@ const App = () => {
           progress={progress}
           // onLoaderFinished={() => setProgress(0)}
         />
-        <Navbar />
+        <Navbar title="NewsUp" mode={mode} modeSwitch={modeSwitch} />
         <Switch>
           <Route exact path="/" key="general">
             <News
+              mode={mode}
               apiKey={apiKey}
               setProgress={setProgress}
               pageSize={6}
@@ -32,6 +44,7 @@ const App = () => {
           </Route>
           <Route exact path="/business" key="business">
             <News
+              mode={mode}
               apiKey={apiKey}
               setProgress={setProgress}
               pageSize={6}
@@ -41,6 +54,7 @@ const App = () => {
           </Route>
           <Route exact path="/entertainment" key="entertainment">
             <News
+              mode={mode}
               apiKey={apiKey}
               setProgress={setProgress}
               pageSize={6}
@@ -50,6 +64,7 @@ const App = () => {
           </Route>
           <Route exact path="/health" key="health">
             <News
+              mode={mode}
               apiKey={apiKey}
               setProgress={setProgress}
               pageSize={6}
@@ -59,6 +74,7 @@ const App = () => {
           </Route>
           <Route exact path="/science" key="science">
             <News
+              mode={mode}
               apiKey={apiKey}
               setProgress={setProgress}
               pageSize={6}
@@ -68,6 +84,7 @@ const App = () => {
           </Route>
           <Route exact path="/sports" key="sports">
             <News
+              mode={mode}
               apiKey={apiKey}
               setProgress={setProgress}
               pageSize={6}
@@ -77,6 +94,7 @@ const App = () => {
           </Route>
           <Route exact path="/technology" key="technology">
             <News
+              mode={mode}
               apiKey={apiKey}
               setProgress={setProgress}
               pageSize={6}

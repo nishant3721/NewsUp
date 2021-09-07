@@ -1,13 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
-const Navbar = () => {
+const Navbar = (props) => {
   return (
     <div>
-      <nav className="fixed-top navbar navbar-expand-lg navbar-dark bg-dark">
+      <nav
+        className={`fixed-top navbar navbar-expand-lg navbar-${props.mode} bg-${props.mode} `}
+      >
         <div className="container-fluid">
           <Link className="navbar-brand" to="/">
-            NewsUp
+            {props.title}
           </Link>
           <button
             className="navbar-toggler"
@@ -59,10 +62,36 @@ const Navbar = () => {
               </li>
             </ul>
           </div>
+          <div
+            className={`form-check form-switch text-${
+              props.mode === `light` ? `dark` : `white`
+            }`}
+          >
+            <input
+              onClick={props.modeSwitch}
+              className="form-check-input"
+              type="checkbox"
+              id="flexSwitchCheckChecked"
+            />
+            <label
+              className="form-check-label"
+              htmlFor="flexSwitchCheckChecked"
+            >
+              Dark Mode
+            </label>
+          </div>
         </div>
       </nav>
     </div>
   );
+};
+
+Navbar.defaultProps = {
+  title: "NewsUp",
+};
+
+Navbar.propTypes = {
+  title: PropTypes.string,
 };
 
 export default Navbar;
