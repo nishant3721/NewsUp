@@ -61,24 +61,24 @@ const Navbar = (props) => {
                 </Link>
               </li>
             </ul>
-          </div>
-          <div
-            className={`form-check form-switch text-${
-              props.mode === `light` ? `dark` : `white`
-            }`}
-          >
-            <input
-              onClick={props.modeSwitch}
-              className="form-check-input"
-              type="checkbox"
-              id="flexSwitchCheckChecked"
-            />
-            <label
-              className="form-check-label"
-              htmlFor="flexSwitchCheckChecked"
+            <div
+              className={`form-check form-switch text-${
+                props.mode === `light` ? `dark` : `white`
+              }`}
             >
-              Dark Mode
-            </label>
+              <input
+                onClick={props.modeSwitch}
+                className="form-check-input"
+                type="checkbox"
+                id="flexSwitchCheckChecked"
+              />
+              <label
+                className="form-check-label"
+                htmlFor="flexSwitchCheckChecked"
+              >
+                Dark Mode
+              </label>
+            </div>
           </div>
         </div>
       </nav>

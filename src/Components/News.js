@@ -3,6 +3,7 @@ import NewsItem from "./NewsItem";
 import ProgressBar from "./ProgressBar";
 import PropTypes from "prop-types";
 import InfiniteScroll from "react-infinite-scroll-component";
+import ScrollUp from "./ScrollUp";
 
 const News = (props) => {
   const [articles, setArticles] = useState([]);
@@ -70,7 +71,15 @@ const News = (props) => {
         dataLength={articles.length} //This is important field to render the next data
         next={fetchData}
         hasMore={articles.length !== totalArticles}
-        loader={<h4>Loading...</h4>}
+        loader={
+          <h4
+            className={`text-center text-${
+              props.mode === `light` ? `dark` : `light`
+            }`}
+          >
+            Loading...
+          </h4>
+        }
         // endMessage={
         //   <p style={{ textAlign: "center" }}>
         //     <b>Yay! You have seen it all</b>
@@ -98,6 +107,7 @@ const News = (props) => {
           </div>
         </div>
       </InfiniteScroll>
+      <ScrollUp />
     </>
   );
 };
