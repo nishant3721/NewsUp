@@ -19,7 +19,8 @@ const App = () => {
     }
   };
 
-  const apiKey = process.env.REACT_APP_NEWS_API;
+  // const apiKey = process.env.REACT_APP_NEWS_API;
+  const apiKey = "95909eaed6704e36923f51f7bfd06af1";
 
   return (
     <div>
